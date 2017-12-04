@@ -11,9 +11,9 @@
       </mt-swipe>
 
       <!-- 九宫格 -->
-        <my-ul>
-            <my-li v-for="(router,index) in homeRouters" :key="index">
-                <a href="">
+        <my-ul v-model="selected">
+            <my-li v-for="(router,index) in homeRouters" :key="index" :id="router.className">
+                <a :href="'#/' + router.className" >
                     <div :class="'back-img ' + router.className">
                         {{router.title}}
                     </div>
@@ -35,6 +35,7 @@
         data() {
             return{
                 imgs:[],
+                selected:'',
                 homeRouters:[{
                     className:'news',
                     title:'新闻列表'
@@ -54,6 +55,15 @@
                     className:'callme',
                     title:'联系我们'
                 }]
+            }
+        },
+        watch:{
+            selected(newV){
+                console.log(newV);
+                // 让锚点值改变
+                this.$router.push({
+                    name:newV
+                });
             }
         }
     }

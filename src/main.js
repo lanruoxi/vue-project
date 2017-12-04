@@ -4,8 +4,10 @@ import Vue from 'vue';
 // 注册全局组件 start
 import MyUl from './components/Commons/MyUl.vue';
 import MyLi from './components/Commons/MyLi.vue';
-Vue.component(MyUl.name,MyUl);
-Vue.component(MyLi.name,MyLi);
+import Backheader from './components/Commons/Backheader.vue';
+Vue.component(MyUl.name, MyUl);
+Vue.component(MyLi.name, MyLi);
+Vue.component(Backheader.name, Backheader);
 // 注册全局组件 end
 
 
@@ -16,6 +18,8 @@ import Home from './components/Home/Home.vue'
 import Shopcart from './components/Shopcart/Shopcart.vue'
 import Member from './components/Member/Member.vue'
 import Search from './components/Search/Search.vue'
+import Newlist from './components/Home/New/Newlist.vue'
+import Newdetail from './components/Home/New/Newdetail.vue'
 // 路由相关组件 -end
 
 
@@ -25,30 +29,52 @@ Vue.use(VueRouter);
 // 创建路由对象
 let router = new VueRouter();
 router.addRoutes([
-    // 重定向到首页
-    {
-        path: '/', redirect: {
-            name: 'home'
+        // 重定向到首页
+        {
+            path: '/',
+            redirect: {
+                name: 'home'
+            }
+        },
+        // 首页
+        {
+            name: 'home',
+            path: '/home',
+            component: Home,
+
+        },
+        // 会员
+        {
+            name: 'member',
+            path: '/member',
+            component: Member
+        },
+        //购物车
+        {
+            name: 'shopcart',
+            path: '/shopcart',
+            component: Shopcart
+        },
+        //查找
+        {
+            name: 'search',
+            path: '/search',
+            component: Search
+        },
+        {
+            name: 'news',
+            path: '/news',
+            component: Newlist,
+            children: [{
+                name: 'newdetail',
+                path: 'newdetail',
+                component: Newdetail
+            }]
         }
-    },
-    // 首页
-    {
-        name: 'home', path: '/home', component: Home
-    },
-    // 会员
-    {
-        name: 'member', path: '/member', component: Member
-    },
-    //购物车
-    {
-        name: 'shopcart', path: '/shopcart', component: Shopcart
-    },
-    //查找
-    {
-        name: 'search', path: '/search', component: Search
-    },
-])
-// VueRouter -end
+
+
+    ])
+    // VueRouter -end
 
 
 // MintUi -start
