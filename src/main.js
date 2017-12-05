@@ -44,6 +44,7 @@ import NewsList from './components/News/NewsList.vue';
 import NewsDetail from './components/News/NewsDetail.vue';
 import Photolist from './components/Photo/Photolist.vue';
 import PhotoDetail from './components/Photo/PhotoDetail.vue';
+import GoodsList from './components/Goods/GoodsList.vue';
 
 // 路由相关组件 结束
 
@@ -74,8 +75,9 @@ router.addRoutes([
     { name: 'search', path: '/search', component: Search }, //查找
     { name: 'news.list', path: '/news/list', component: NewsList }, //新闻列表
     { name: 'news.detail', path: '/news/detail', component: NewsDetail }, //新闻详情
-    { name: 'photo.list', path: '/photo/list', component: Photolist }, //新闻详情
-    { name: 'photo.detail', path: '/photo/detail', component: PhotoDetail }, //新闻详情
+    { name: 'photo.list', path: '/photo/list', component: Photolist }, //图文列表
+    { name: 'photo.detail', path: '/photo/detail', component: PhotoDetail }, //图文详情
+    { name: 'goods.list', path: '/goods/list', component: GoodsList }, //图文详情
 ]);
 // VueRouter 结束
 
@@ -85,6 +87,11 @@ import 'mint-ui/lib/style.css';
 Vue.use(MintUi);
 // MintUi 结束
 
+
+// pulldown start
+import { InfiniteScroll } from 'mint-ui';
+Vue.use(InfiniteScroll);
+// pulldown end
 
 
 
