@@ -26,30 +26,35 @@ module.exports = {
             },
             {
                 //处理文件
-                test:/\.(jpg|png|svg|ttf|gif)$/,
-                loader:'url-loader',
-                options:{
-                    name:'[name].[ext]',//源文件名和后缀
-                    limit:4096,//超出生成文件，否则base64
+                test: /\.(jpg|png|svg|ttf|gif)$/,
+                loader: 'url-loader',
+                options: {
+                    name: '[name].[ext]', //源文件名和后缀
+                    limit: 4096, //超出生成文件，否则base64
                 }
             },
             {
                 //处理js的ES6
-                test:/\.js$/,
-                exclude:/node_modules/,
-                loader:'babel-loader'
-            },{
+                test: /\.js$/,
+                exclude: /node_modules/,
+                loader: 'babel-loader'
+            }, {
                 //处理vue
-                test:/\.vue$/,
-                loader:'vue-loader'
+                test: /\.vue$/,
+                loader: 'vue-loader'
+            },
+            {
+                test: /vue-preview.src.*?js$/,
+                loader: 'babel-loader'
             }
+
 
         ]
     },
-    plugins:[
-    //移动html
+    plugins: [
+        //移动html
         new htmlWebpackPlugin({
-            template:'./src/index.html'
+            template: './src/index.html'
         })
 
     ]

@@ -1,10 +1,17 @@
 <template>
-  <div>搜索</div>
+    <div>
+        查找页面
+    </div>
 </template>
 <script>
-export default {
-  data() {
-    return {};
-  }
-};
+    export default {
+        data(){
+            return {
+
+            }
+        }
+    }
 </script>
+<style>
+    
+</style>

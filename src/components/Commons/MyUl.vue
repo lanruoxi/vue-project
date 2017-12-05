@@ -1,20 +1,21 @@
 <template>
-  <ul>
-      <slot></slot>
-  </ul>
+    <ul>
+        <!-- 任意的li -->
+        <slot></slot>
+    </ul>
 </template>
 <script>
     export default {
         name:'my-ul',
-        data() {
+        data(){
             return {
 
+            }
         }
-      }
     }
 </script>
 <style scoped>
 ul{
-    overflow:hidden;
-}
+    overflow: hidden;
+} 
 </style>
