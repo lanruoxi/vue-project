@@ -7,16 +7,16 @@
       <!-- body -->
       <my-ul>
         <li v-for="(router,index) in news" :key="index">
-          <a :href="'/#/news/newdetail/' + router.id">
+          <router-link :to="{name:'newdetail',query:{newsId:router.id}  }">
             <img :src="router.img_url">
             <div>
               <span>{{router.title}}</span>
               <div>
                 <p>点击数{{router.click}}</p>
-                <p>发表时间：{{router.add_time}}</p>
+                <p>发表时间：{{router.add_time|convert-time}}</p>
               </div>
             </div>
-          </a>
+         </router-link>
         </li>
       </my-ul>
       <router-view></router-view>
@@ -32,7 +32,8 @@ export default {
   },
   data() {
     return {
-      news: ""
+      news: "",
+     newsId:'',
     };
   }
 };

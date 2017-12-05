@@ -1,6 +1,20 @@
 // 引入资源
 import Vue from 'vue';
 
+
+// 注册全局过滤器 start
+import Moment from 'moment';
+Vue.filter('convert-time', (value) => {
+    return Moment(value).format('YYYY-MM-DD');
+});
+
+
+
+
+// 注册全局过滤器 end
+
+
+
 // 注册全局组件 start
 import MyUl from './components/Commons/MyUl.vue';
 import MyLi from './components/Commons/MyLi.vue';
@@ -65,11 +79,12 @@ router.addRoutes([
             name: 'news',
             path: '/news',
             component: Newlist,
-            children: [{
-                name: 'newdetail',
-                path: 'newdetail',
-                component: Newdetail
-            }]
+        },
+        // 新闻详情
+        {
+            name: 'newdetail',
+            path: '/news/newdetail',
+            component: Newdetail
         }
 
 
