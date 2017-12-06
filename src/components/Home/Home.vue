@@ -1,13 +1,6 @@
 <template>
     <div>
-        <mt-swipe :auto="4000">
-          <mt-swipe-item v-for="(pic,index) in imgs" :key="index">
-                <!-- 广告使用a标签 -->
-                <a :href="pic.url">
-                    <img v-bind:src="pic.img">
-                </a>
-          </mt-swipe-item>
-        </mt-swipe>
+       <my-swipe url="getlunbo"></my-swipe>
 
         <!-- 下有九宫格 -->
         <my-ul>
@@ -44,7 +37,7 @@
                 },{
                     className:'goods',
                     title:'商品列表',
-                    router:{name:'goods.list',params:{pageIndex:1}}
+                    router:{name:'goods.list',query:{page:1} }
                 },{
                     className:'feedback',
                     title:'留言反馈',

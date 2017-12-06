@@ -1,6 +1,8 @@
 <template>
     <div>  
+        
         <nav-bar title="图文详情"></nav-bar>
+
         <div class="photo-title">
             <p>{{imgInfo.title}}</p>
             <span>发起日期：{{imgInfo.add_time|convertTime}}</span>
@@ -10,27 +12,36 @@
         <my-ul>
             <my-li v-for="(img,index) in imgs" :key="index">
                 <img class="preview-img" :src="img.src" @click="$preview.open(index, imgs)">
-            </my-li>
+
+            </my-li>    
         </my-ul>
         <div class="photo-desc">
             <p v-html="imgInfo.content"></p>
         </div>
+
+        <!-- 使用评论组件 -->
+        <comment :cid="$route.params.imgId"></comment>
+
+
     </div>
 </template>
 <script>
 export default {
     data(){
-        return{
-            imgInfo:[],
-            imgs:[]
+        return {
+            imgInfo:{},//图文详情数据
+            imgs:[], //图片数据
         }
     },
     created(){
+        //获取路由参数
         let imgId = this.$route.params.imgId;
+        //获取图文详情
         this.$axios.get('getimageInfo/' + imgId)
         .then(res=>{
             this.imgInfo = res.data.message[0];
         })
+        //获取缩略图
         this.$axios.get('getthumimages/' + imgId)
         .then(res=>{
             this.imgs = res.data.message;
@@ -40,7 +51,6 @@ export default {
                 ele.w = 600;
             })
         })
-        
     }
 }
 
@@ -49,6 +59,8 @@ export default {
 img{
     width: 100%;
 }
+
+
 li {
     list-style: none;
 }

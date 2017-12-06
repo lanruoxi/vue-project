@@ -1,115 +1,162 @@
 <template>
     <div>
-        <nav-bar title="商品列表"></nav-bar>
-        <ul   v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="10">
-            <li v-for="(good,index) in goodsInfo" :key="index">
-                <a>
-                    <img :src="good.img_url">
-                    <div class="title">{{good.title}}</div>
+            <nav-bar title="商品列表"></nav-bar>
+
+        <mt-loadmore :bottom-method="loadBottom" ref="loadmore" :auto-fill="isAutoFill"
+        :bottom-all-loaded="allLoaded">
+            <ul>
+            <li v-for="goods in goodsList" :key="goods.id">
+                <router-link :to="{name:'goods.detail',params:{goodsId:goods.id}}">
+                    <img :src="goods.img_url">
+                    <div class="title">{{goods.title|convertTitle(25)}}</div>
                     <div class="desc">
                         <div class="sell">
-                            <span>￥{{good.market_price}}</span>
-                            <s>￥{{good.sell_price}}</s>
+                            <span>￥{{goods.sell_price}}</span>
+                            <s>￥{{goods.market_price}}</s>
                         </div>
                         <div class="detail">
                             <div class="hot">
                                 热卖中
                             </div>
                             <div class="count">
-                                剩{{good.stock_quantity}}件
+                                剩{{goods.stock_quantity}}件
                             </div>
                         </div>
                     </div>
-                </a>
-            </li>        
-        </ul>
+                </router-link>
+            </li>   
+            </ul>      
+        </mt-loadmore>
     </div>
 </template>
 <script>
 export default {
-  data() {
-    return {
-      goodsInfo: []
-    };
-  },
-  created() {
-    let pageIndex = this.$route.params.pageIndex;
-    this.$axios.get("getgoods?pageindex=" + pageIndex).then(res => {
-      this.goodsInfo = res.data.message;
-      console.log(this.goodsInfo);
-    });
-  },
-  loadMore() {
-  this.loading = true;
-  setTimeout(() => {
-    let last = this.goodsInfo[this.goodsInfo.length - 1];
-    for (let i = 1; i <= 10; i++) {
-      this.goodsInfo.push(last + i);
+    // 接受app里的头和底部
+    props: ['appRefs'],
+
+    data(){
+        return {
+            goodsList:[],//商品列表
+            // autofill 是否自动检测，并调用loadBottom
+            isAutoFill:false,
+            // allLoaded 数据是否完全加载，如果是，禁止调用函数
+            allLoaded:false,
+            // 页码
+            page:1,
+            // 根节点div的高度
+            height:'',
+        }
+    },
+    created(){
+        //获取路由参数
+        let page = this.$route.query.page;
+        //发请求
+        this.$axios.get(`getgoods?pageindex=${page}`)
+        .then(res=>{
+            this.goodsList = res.data.message;
+        })
+        .catch(err=>console.log(err));
+    },
+    methods:{
+        // 检测状态改变
+        // changeStatus(s){
+        //     console.log(s);
+        // },
+        // 触发上拉函数
+        loadBottom(){
+           this.$axios.get(`getgoods?pageindex=${this.page}`)
+           .then(res=>{
+            //    判断是否还有数据
+            if(res.data.message.length == 0){
+                this.$toast({
+                    message:'没有更多数据了！',
+                    duration:2000
+                });
+                // 禁止下拉刷新函数调用
+                this.allLoaded = true;
+                return;
+            }
+
+            // 追加下一页的数据
+            this.goodsList = this.goodsList.concat(res.data.message);
+            this.page ++;
+            // 从loading状态通知回到pull初始状态
+            this.$refs.loadmore.onBottomLoaded();
+           })
+           .catch(err=>console.log(err));
+        },
+        // 改变父盒子高度
+        changeHeight(){
+            this.height = document.documentElement.clientHeight - this.appRefs.header.$el.offsetHeight;
+
+        },
+        mounted(){
+            this.changeHeight();
+        }
     }
-    this.loading = false;
-  }, 2500);
-}
-};
-</script>
-<style scoped>
-ul {
-  overflow: hidden;
-}
-li {
-  width: 50%;
-  float: left;
-  padding: 6px;
-  box-sizing: border-box;
 }
 
+
+</script>
+<style scoped>
+
+ul {
+    overflow: hidden;
+}
+li {
+    width: 50%;
+    float: left;
+    padding: 6px;
+    box-sizing: border-box;
+}
+
+
 li > a:not(.mui-btn) {
-  margin: 0px;
-  padding: 0px;
-  border: 1px solid #5c5c5c;
-  box-shadow: 0 0 4px #666;
-  width: 100%;
-  display: block;
+    margin: 0px;
+    padding: 0px;
+    border: 1px solid #5c5c5c;
+    box-shadow: 0 0 4px #666;
+    width: 100%;
+    display: block;
+
+
 }
 
 li > a:not(.mui-btn) img {
-  width: 100%;
+     width: 100%;
 }
 
 .sell > span {
-  float: left;
-  color: red;
-  text-align: left;
+    float: left;
+    color: red;
+    text-align: left;
 }
 
-.detail > .hot {
-  float: left;
-  text-align: left;
-  font-size: 15px;
+.detail >.hot {
+    float: left;
+    text-align: left;
+    font-size: 15px;
 }
 
-.detail > .count {
-  float: right;
-  text-align: right;
-  font-size: 15px;
+.detail >.count {
+    float: right;
+    text-align: right;
+    font-size: 15px;
 }
+
 
 /*撑开，去除浮动没有的高度*/
 
 .detail {
-  overflow: hidden;
+    overflow: hidden;
 }
 
 .desc {
-  color: rgba(92, 92, 92, 0.8);
-  background-color: rgba(0, 0, 0, 0.2);
+    color: rgba(92, 92, 92, 0.8);
+    background-color: rgba(0, 0, 0, 0.2);
 }
 
 img {
-  height: 200px;
-}
-.title {
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
+    height: 200px;
 }
 </style>

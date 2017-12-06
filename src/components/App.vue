@@ -1,7 +1,7 @@
 <template>
     <div>
             <!-- 头部 -->
-            <mt-header title="vue-project"></mt-header>
+            <mt-header title="传智34期"></mt-header>
             <router-view class="tmpl"></router-view>
             <mt-tabbar v-model="selected">
               <mt-tab-item id="home">
